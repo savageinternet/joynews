@@ -69,7 +69,7 @@ vid.addEventListener('canplay', enablestart, false);
  * Each block, it reads the current maximum emotion, then runs that
  * pattern via the HTML5 vibration API.
  */
-var VIBRATION_BLOCK = 2500;
+var VIBRATION_BLOCK = 1500;
 var vibrationPattern = null;
 var vibrationTimeout = null;
 
@@ -93,10 +93,10 @@ function jumpy(duration) {
   var pattern = [];
   var total = 0;
   while (total < VIBRATION_BLOCK) {
-    var off = Math.min(100 + Math.round(Math.random() * 700), VIBRATION_BLOCK - total);
+    var off = Math.min(100 + Math.round(Math.random() * 400), VIBRATION_BLOCK - total);
     pattern.push(off);
     total += off;
-    var on = Math.min(100 + Math.round(Math.random() * 200), VIBRATION_BLOCK - total);
+    var on = Math.min(75 + Math.round(Math.random() * 150), VIBRATION_BLOCK - total);
     if (on > 0) {
       pattern.push(on);
       total += on;
@@ -119,7 +119,7 @@ function getVibrationPattern(emotion) {
 
 function vibrationLoop() {
   vibrationTimeout = setTimeout(vibrationLoop, VIBRATION_BLOCK);
-  setBodyClass(maxEmotion);
+  setPlayIcon(maxEmotion);
   var pattern = getVibrationPattern(maxEmotion);
   console.log('vibrate', pattern);
   navigator.vibrate(pattern);
@@ -156,6 +156,7 @@ function startTracking() {
     last = null;
     emotions = {};
     animRequest = requestAnimFrame(loop);
+    setPlayIcon("meh");
   }
   var startbutton = document.getElementById('startbutton');
   startbutton.value = "stop";
@@ -171,7 +172,7 @@ function stopTracking() {
     ctrack.stop();
     cancelRequestAnimFrame(animRequest);
     animRequest = null;
-    setBodyClass("");
+    setPlayIcon("");
   }
   var startbutton = document.getElementById('startbutton');
   startbutton.value = "start";
@@ -216,8 +217,24 @@ function blendEmotions(e1, e2, elapsed) {
   return e1;
 }
 
-function setBodyClass(className) {
-  document.body.className = className;
+function setPlayIcon(emotion) {
+  var innerHtml = '&#x25B6';
+  if (emotion === 'angry') {
+    innerHtml = '&#x1F620';
+  } else if (emotion === 'sad') {
+    innerHtml = '&#x1F622';
+  } else if (emotion === 'surprised') {
+    innerHtml = '&#x1F633';
+  } else if (emotion === 'happy') {
+    innerHtml = '&#x1F603';
+  } else if (emotion === 'meh') {
+    innerHtml = '&#x1F610';
+  }
+  document.getElementById('startbutton').innerHTML = innerHtml;
+}
+
+function setBodyClass(emotion) {
+  document.body.className = emotion;
 }
 
 function loop(timestamp) {
