@@ -156,6 +156,7 @@ function startTracking() {
     last = null;
     emotions = {};
     animRequest = requestAnimFrame(loop);
+    maxEmotion = "meh";
     setPlayIcon("meh");
   }
   var startbutton = document.getElementById('startbutton');
@@ -195,6 +196,9 @@ function getMaxEmotion(emotions) {
       maxEmotion = emotion;
       maxValue = emotions[emotion];
     }
+  }
+  if (maxValue < 0.1) {
+    return 'meh';
   }
   return maxEmotion;
 }
