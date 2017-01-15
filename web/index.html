@@ -6,16 +6,41 @@
 </head>
 <body>
 <h1>Feel Good About the News</h1>
-<button id="btn_vibrate">Vibrate!</button>
+<button id="btn_vibrate_hard">Vibrate Hard!</button>
+<button id="btn_vibrate_soft">Vibrate Soft!</button>
 <script>
 navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+if (!navigator.vibrate) {
+  alert('Your browser does not support the HTML5 vibration API.');
+  throw new Error('no vibration support');
+}
 
-document.getElementById('btn_vibrate').addEventListener('click', () => {
-  if (!navigator.vibrate) {
-    alert('Your browser does not support the HTML5 vibration API.');
-    return;
+const DUTY_CYCLE = 10;
+function pwm(duration, power) {
+  if (power === 0) {
+    return [0, duration];
+  } else if (power === 1) {
+    return [duration];
   }
-  navigator.vibrate(1000);
+  const pattern = [];
+  const on = Math.round(power * DUTY_CYCLE);
+  for (var i = 0; i < duration; i += DUTY_CYCLE) {
+    pattern.push(on);
+    pattern.push(DUTY_CYCLE - on);
+  }
+  return pattern;
+}
+
+document.getElementById('btn_vibrate_hard').addEventListener('click', () => {
+  const pattern = pwm(1000, 1);
+  console.log(pattern);
+  navigator.vibrate(pattern);
+});
+
+document.getElementById('btn_vibrate_soft').addEventListener('click', () => {
+  const pattern = pwm(1000, 0.5);
+  console.log(pattern);
+  navigator.vibrate(pattern);
 });
 </script>
 </body>
