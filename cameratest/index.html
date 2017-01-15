@@ -14,20 +14,6 @@
 				max-width: 1150px;
 			}
 
-			#overlay {
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				-o-transform : scaleX(-1);
-				-webkit-transform : scaleX(-1);
-				transform : scaleX(-1);
-				-ms-filter : fliph; /*IE*/
-				filter : fliph; /*IE*/
-
-				width : 600px;
-				height : 450px;
-			}
-
 			#videoel {
 				-o-transform : scaleX(-1);
 				-webkit-transform : scaleX(-1);
@@ -37,6 +23,7 @@
 
 				width : 600px;
 				height : 450px;
+        display: none;
 			}
 
 			#container {
@@ -50,10 +37,6 @@
 				margin-left : auto;
 				margin-right : auto;
 				max-width: 600px;
-			}
-
-			#sketch, #filter {
-				display: none;
 			}
 
 			h2 {
@@ -125,38 +108,22 @@
 		</script>
 	</head>
 	<body>
-		<script src="../js/utils.js"></script>
-		<script src="../js/clmtrackr.js"></script>
-		<script src="../models/model_pca_20_svm_emotionDetection.js"></script>
-		<script src="../js/Stats.js"></script>
-		<script src="./js/d3.min.js"></script>
-		<script src="./js/emotion_classifier.js"></script>
-		<script src="./js/emotionmodel.js"></script>
+		<script src="/js/utils.js"></script>
+		<script src="/js/clmtrackr.js"></script>
+		<script src="/models/model_pca_20_svm_emotionDetection.js"></script>
+		<script src="/js/emotion_classifier.js"></script>
+		<script src="/js/emotionmodel.js"></script>
 		<div id="content">
 			<h2>Emotion detection example</h2>
 			<p>This a test of emotion detection based on parameter output from <em>clmtrackr</em>.</p>
 			<div id="container">
-				<video id="videoel" width="400" height="300" preload="auto" loop>
-				</video>
-				<canvas id="overlay" width="400" height="300"></canvas>
-			</div>
-			<canvas id="sketch" width="400" height="300"></canvas>
-			<div id="emotion_container">
-				<div id="emotion_icons">
-					<img class="emotion_icon" id="icon1" src="./media/icon_angry.png">
-					<img class="emotion_icon" id="icon2" src="./media/icon_sad.png">
-					<img class="emotion_icon" id="icon3" src="./media/icon_surprised.png">
-					<img class="emotion_icon" id="icon4" src="./media/icon_happy.png">
-				</div>
-				<div id='emotion_chart'></div>
+				<video id="videoel" width="400" height="300" preload="auto" loop></video>
 			</div>
 			<div id="controls">
 				<input class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="startVideo()" id="startbutton"></input>
 			</div>
 			<script>
 				var vid = document.getElementById('videoel');
-				var overlay = document.getElementById('overlay');
-				var overlayCC = overlay.getContext('2d');
 
 				/********** check and set up video/webcam **********/
 
@@ -228,117 +195,19 @@
 
 				function drawLoop() {
 					requestAnimFrame(drawLoop);
-					overlayCC.clearRect(0, 0, 400, 300);
-					//psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
-					if (ctrack.getCurrentPosition()) {
-						ctrack.draw(overlay);
-					}
 					var cp = ctrack.getCurrentParameters();
 
 					var er = ec.meanPredict(cp);
-					if (er) {
-						updateData(er);
-						for (var i = 0;i < er.length;i++) {
-							if (er[i].value > 0.4) {
-								document.getElementById('icon'+(i+1)).style.visibility = 'visible';
-							} else {
-								document.getElementById('icon'+(i+1)).style.visibility = 'hidden';
-							}
-						}
+          if (er) {
+            if (Math.random() < 0.05) {
+              console.log(JSON.stringify(er));
+            }
 					}
 				}
 
 				var ec = new emotionClassifier();
 				ec.init(emotionModel);
 				var emotionData = ec.getBlank();
-
-				/************ d3 code for barchart *****************/
-
-				var margin = {top : 20, right : 20, bottom : 10, left : 40},
-					width = 400 - margin.left - margin.right,
-					height = 100 - margin.top - margin.bottom;
-
-				var barWidth = 30;
-
-				var formatPercent = d3.format(".0%");
-
-				var x = d3.scale.linear()
-					.domain([0, ec.getEmotions().length]).range([margin.left, width+margin.left]);
-
-				var y = d3.scale.linear()
-					.domain([0,1]).range([0, height]);
-
-				var svg = d3.select("#emotion_chart").append("svg")
-					.attr("width", width + margin.left + margin.right)
-					.attr("height", height + margin.top + margin.bottom)
-
-				svg.selectAll("rect").
-				  data(emotionData).
-				  enter().
-				  append("svg:rect").
-				  attr("x", function(datum, index) { return x(index); }).
-				  attr("y", function(datum) { return height - y(datum.value); }).
-				  attr("height", function(datum) { return y(datum.value); }).
-				  attr("width", barWidth).
-				  attr("fill", "#2d578b");
-
-				svg.selectAll("text.labels").
-				  data(emotionData).
-				  enter().
-				  append("svg:text").
-				  attr("x", function(datum, index) { return x(index) + barWidth; }).
-				  attr("y", function(datum) { return height - y(datum.value); }).
-				  attr("dx", -barWidth/2).
-				  attr("dy", "1.2em").
-				  attr("text-anchor", "middle").
-				  text(function(datum) { return datum.value;}).
-				  attr("fill", "white").
-				  attr("class", "labels");
-
-				svg.selectAll("text.yAxis").
-				  data(emotionData).
-				  enter().append("svg:text").
-				  attr("x", function(datum, index) { return x(index) + barWidth; }).
-				  attr("y", height).
-				  attr("dx", -barWidth/2).
-				  attr("text-anchor", "middle").
-				  attr("style", "font-size: 12").
-				  text(function(datum) { return datum.emotion;}).
-				  attr("transform", "translate(0, 18)").
-				  attr("class", "yAxis");
-
-				function updateData(data) {
-					// update
-					var rects = svg.selectAll("rect")
-						.data(data)
-						.attr("y", function(datum) { return height - y(datum.value); })
-						.attr("height", function(datum) { return y(datum.value); });
-					var texts = svg.selectAll("text.labels")
-						.data(data)
-						.attr("y", function(datum) { return height - y(datum.value); })
-						.text(function(datum) { return datum.value.toFixed(1);});
-
-					// enter
-					rects.enter().append("svg:rect");
-					texts.enter().append("svg:text");
-
-					// exit
-					rects.exit().remove();
-					texts.exit().remove();
-				}
-
-				/******** stats ********/
-
-				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				document.getElementById('container').appendChild( stats.domElement );
-
-				// update stats on every iteration
-				document.addEventListener('clmtrackrIteration', function(event) {
-					stats.update();
-				}, false);
-
 			</script>
 		</div>
 	</body>
