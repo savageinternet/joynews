@@ -121,7 +121,7 @@ function vibrationLoop() {
   vibrationTimeout = setTimeout(vibrationLoop, VIBRATION_BLOCK);
   setPlayIcon(maxEmotion);
   var pattern = getVibrationPattern(maxEmotion);
-  console.log('vibrate', pattern);
+  //console.log('vibrate', pattern);
   navigator.vibrate(pattern);
 }
 
@@ -210,6 +210,7 @@ function getMaxEmotion(emotions) {
   if (maxValue < 0.1) {
     return 'meh';
   }
+  //console.log(maxEmotion, maxValue);
   return maxEmotion;
 }
 
@@ -269,7 +270,6 @@ function loop(timestamp) {
     emotions = blendEmotions(emotions, nextEmotions, elapsed);
   }
   maxEmotion = getMaxEmotion(emotions);
-  console.log(maxEmotion);
   last = timestamp;
 }
 
