@@ -73,7 +73,7 @@ var VIBRATION_BLOCK = 1500;
 var vibrationPattern = null;
 var vibrationTimeout = null;
 
-var DUTY_CYCLE = 10;
+var DUTY_CYCLE = 20;
 function pwm(duration, power) {
   if (power === 0) {
     return 0;
