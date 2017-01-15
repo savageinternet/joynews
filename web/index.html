@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Feel Good About the News</title>
+</head>
+<body>
+<h1>Feel Good About the News</h1>
+<button id="btn_vibrate">Vibrate!</button>
+<script>
+navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+
+document.getElementById('btn_vibrate').addEventListener('click', () => {
+  if (!navigator.vibrate) {
+    alert('Your browser does not support the HTML5 vibration API.');
+    return;
+  }
+  navigator.vibrate(1000);
+});
+</script>
+</body>
+</html>
