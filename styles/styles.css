@@ -61,6 +61,14 @@ h3 {
   display:inline;
 }
 
+.minilogo {
+  display:inline;
+}
+
+.minilogo > img {
+  height:40px;
+}
+
 .share-buttons-holder {
   display:inline;
   position:absolute;
