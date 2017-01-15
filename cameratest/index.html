@@ -141,6 +141,12 @@
 				<input class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="startTracking()" id="startbutton"></input>
 			</div>
 			<script>
+        navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+        if (!navigator.vibrate) {
+          alert('Your browser does not support the HTML5 vibration API.');
+          throw new Error('no vibration support');
+        }
+
 				var vid = document.getElementById('videoel');
 
 				/********** check and set up video/webcam **********/
@@ -199,6 +205,69 @@
 
 				vid.addEventListener('canplay', enablestart, false);
 
+        /*********** setup of vibration *************/
+
+        /*
+         * The vibration code runs on a loop in blocks of VIBRATION_BLOCK ms.
+         * Each block, it reads the current maximum emotion, then runs that
+         * pattern via the HTML5 vibration API.
+         */
+        var VIBRATION_BLOCK = 2500;
+        var vibrationPattern = null;
+        var vibrationTimeout = null;
+
+        var DUTY_CYCLE = 10;
+        function pwm(duration, power) {
+          if (power === 0) {
+            return 0;
+          } else if (power === 1) {
+            return [duration];
+          }
+          var pattern = [];
+          var on = Math.round(power * DUTY_CYCLE);
+          for (var i = 0; i < duration; i += DUTY_CYCLE) {
+            pattern.push(on);
+            pattern.push(DUTY_CYCLE - on);
+          }
+          return pattern;
+        }
+
+        function jumpy(duration) {
+          var pattern = [];
+          var total = 0;
+          while (total < VIBRATION_BLOCK) {
+            var off = Math.min(100 + Math.round(Math.random() * 700), VIBRATION_BLOCK - total);
+            pattern.push(off);
+            total += off;
+            var on = Math.min(100 + Math.round(Math.random() * 200), VIBRATION_BLOCK - total);
+            if (on > 0) {
+              pattern.push(on);
+              total += on;
+            }
+          }
+          return pattern;
+        }
+
+        function getVibrationPattern(emotion) {
+          if (emotion === 'angry') {
+            return pwm(VIBRATION_BLOCK, 1);
+          } else if (emotion === 'sad') {
+            return pwm(VIBRATION_BLOCK, 0.5);
+          } else if (emotion === 'surprised') {
+            return jumpy(VIBRATION_BLOCK);
+          } else {
+            return pwm(VIBRATION_BLOCK, 0);
+          }
+        }
+
+        function vibrationLoop() {
+          vibrationTimeout = setTimeout(vibrationLoop, VIBRATION_BLOCK);
+          setBodyClass(maxEmotion);
+          var pattern = getVibrationPattern(maxEmotion);
+          console.log('vibrate', pattern);
+          navigator.vibrate(pattern);
+        }
+
 				/*********** setup of emotion detection *************/
 
 				var ctrack = new clm.tracker({useWebGL : true});
@@ -212,6 +281,7 @@
         var HALF_LIFE = 1000;
         var start = null;
         var last = null;
+        var maxEmotion = null;
         var emotions = {};
 
         /*
@@ -220,31 +290,35 @@
         var animRequest = null;
 
 				function startTracking() {
+          if (vibrationTimeout === null) {
+            vibrationTimeout = setTimeout(vibrationLoop, 0);
+          }
           if (animRequest === null) {
             ctrack.start(vid);
             start = null;
             last = null;
             emotions = {};
             animRequest = requestAnimFrame(loop);
-
-            var startbutton = document.getElementById('startbutton');
-  					startbutton.value = "stop";
-            startbutton.onclick = stopTracking;
           }
-
+          var startbutton = document.getElementById('startbutton');
+					startbutton.value = "stop";
+          startbutton.onclick = stopTracking;
 				}
 
         function stopTracking() {
+          if (vibrationTimeout !== null) {
+            clearTimeout(vibrationTimeout);
+            vibrationTimeout = null;
+          }
           if (animRequest !== null) {
             ctrack.stop();
             cancelRequestAnimFrame(animRequest);
             animRequest = null;
             setBodyClass("");
-
-            var startbutton = document.getElementById('startbutton');
-  					startbutton.value = "start";
-            startbutton.onclick = startTracking;
           }
+          var startbutton = document.getElementById('startbutton');
+					startbutton.value = "start";
+          startbutton.onclick = startTracking;
         }
 
         function getEmotionMap(er) {
@@ -306,9 +380,8 @@
             var elapsed = timestamp - last;
             emotions = blendEmotions(emotions, nextEmotions, elapsed);
           }
-          var maxEmotion = getMaxEmotion(emotions);
+          maxEmotion = getMaxEmotion(emotions);
           console.log(maxEmotion);
-          setBodyClass(maxEmotion);
           last = timestamp;
 				}
 
