@@ -4,9 +4,22 @@
     <link rel="stylesheet" href="styles/material.purple-pink.min.css">
     <script defer src="js/material.min.js"></script>
     <link rel="stylesheet" href="styles/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>JoyNews</title>
   </head>
   <body>
+
+    <div class="nav-button nav-older">
+      <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--fab mdl-button--colored mdl-shadow--4dp  mdl-color--accent mdl-color-text--accent-contrast" href="story4.html" title="go back" role="button">
+        <i class="material-icons" role="presentation">arrow_back</i>
+      </a>
+    </div>
+
+    <div class="nav-button nav-newer">
+      <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--fab mdl-button--colored mdl-shadow--4dp  mdl-color--accent mdl-color-text--accent-contrast" href="story2.html" title="go back" role="button">
+        <i class="material-icons" role="presentation">arrow_forward</i>
+      </a>
+    </div>
     <div class="mdl-layout mdl-js-layout">
       <div class="mdl-layout__header" style="position:fixed">
         <h3>JoyNews</h3>
@@ -20,18 +33,6 @@
             <div class="mdl-card__media mdl-color-text--grey-50 title_box">
               <h3 class="news_title">Laughter to be 3D printed and launched into space</h3>
             </div>
-
-              <div class="nav-button nav-older">
-                <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--fab mdl-button--colored mdl-shadow--4dp  mdl-color--accent mdl-color-text--accent-contrast" href="story4.html" title="go back" role="button">
-                  <i class="material-icons" role="presentation">arrow_back</i>
-                </a>
-              </div>
-
-              <div class="nav-button nav-newer">
-                <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--fab mdl-button--colored mdl-shadow--4dp  mdl-color--accent mdl-color-text--accent-contrast" href="story2.html" title="go back" role="button">
-                  <i class="material-icons" role="presentation">arrow_forward</i>
-                </a>
-              </div>
 
             <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
               <div class="minilogo"><img src="assets/logo_cnn.svg"></div>
@@ -50,7 +51,7 @@
               <p>
                 Space travel remains a distant reality for most of the world's population. But, next year, the sound and shape of your laughter could make it aboard the International Space Station.
               </p>
-              <img src="assets/story1img.jpg" style="width:100%">
+              <img class="story-img" src="assets/story1img.jpg">
               <p>
                 A new project by Israeli artist Eyal Gever called "#Laugh" invites members of the public to download an app that generates a unique "star," or digital 3D sculpture, based on the sound of their own recorded laughter.
               </p>
@@ -78,7 +79,7 @@
               <p>
                 "Lately, the world seems to be dominated by racism and the rise of right wing politics. Laughter is something we can all do, and that unifies us," Gever told CNN.
               </p>
-              <img src="assets/story1img2.jpg" style="width:100%">
+              <img class="story-img" src="assets/story1img2.jpg">
               <p>
                 The artist explained that he chose geometric elements to represent laughter because they are recognizable to everyone.
               </p>
