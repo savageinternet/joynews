@@ -12,7 +12,25 @@
 				background-color: #f0f0f0;
 				margin: 0px auto;
 				max-width: 1150px;
+
+        transition: background-color 200ms;
 			}
+
+      body.happy {
+        background-color: lightgreen;
+      }
+
+      body.angry {
+        background-color: red;
+      }
+
+      body.sad {
+        background-color: lightblue;
+      }
+
+      body.surprised {
+        background-color: orange;
+      }
 
 			#videoel {
 				-o-transform : scaleX(-1);
@@ -221,6 +239,7 @@
             ctrack.stop();
             cancelRequestAnimFrame(animRequest);
             animRequest = null;
+            setBodyClass("");
 
             var startbutton = document.getElementById('startbutton');
   					startbutton.value = "start";
@@ -266,6 +285,10 @@
           return e1;
         }
 
+        function setBodyClass(className) {
+          document.body.className = className;
+        }
+
 				function loop(timestamp) {
 					animRequest = requestAnimFrame(loop);
 					var cp = ctrack.getCurrentParameters();
@@ -283,7 +306,9 @@
             var elapsed = timestamp - last;
             emotions = blendEmotions(emotions, nextEmotions, elapsed);
           }
-          console.log(getMaxEmotion(emotions));
+          var maxEmotion = getMaxEmotion(emotions);
+          console.log(maxEmotion);
+          setBodyClass(maxEmotion);
           last = timestamp;
 				}
 
