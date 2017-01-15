@@ -93,7 +93,7 @@ function jumpy(duration) {
   var pattern = [];
   var total = 0;
   while (total < VIBRATION_BLOCK) {
-    var off = Math.min(100 + Math.round(Math.random() * 400), VIBRATION_BLOCK - total);
+    var off = Math.min(150 + Math.round(Math.random() * 450), VIBRATION_BLOCK - total);
     pattern.push(off);
     total += off;
     var on = Math.min(75 + Math.round(Math.random() * 150), VIBRATION_BLOCK - total);
@@ -109,7 +109,7 @@ function getVibrationPattern(emotion) {
   if (emotion === 'angry') {
     return pwm(VIBRATION_BLOCK, 1);
   } else if (emotion === 'sad') {
-    return pwm(VIBRATION_BLOCK, 0.5);
+    return pwm(VIBRATION_BLOCK, 0.8);
   } else if (emotion === 'surprised') {
     return jumpy(VIBRATION_BLOCK);
   } else {
