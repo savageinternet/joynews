@@ -3,7 +3,7 @@
 	<head>
 		<title>Face tracker</title>
 		<meta charset="utf-8">
-		<link href="../styles/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="/styles/bootstrap.min.css" rel="stylesheet" type="text/css">
 		<style>
 			@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
 
@@ -120,7 +120,7 @@
 				<video id="videoel" width="400" height="300" preload="auto" loop></video>
 			</div>
 			<div id="controls">
-				<input class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="startVideo()" id="startbutton"></input>
+				<input class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="startTracking()" id="startbutton"></input>
 			</div>
 			<script>
 				var vid = document.getElementById('videoel');
@@ -131,14 +131,16 @@
 					var startbutton = document.getElementById('startbutton');
 					startbutton.value = "start";
 					startbutton.disabled = null;
+
+					vid.play();
 				}
 
 				/*var insertAltVideo = function(video) {
 					if (supports_video()) {
 						if (supports_ogg_theora_video()) {
-							video.src = "../media/cap12_edit.ogv";
+							video.src = "/media/cap12_edit.ogv";
 						} else if (supports_h264_baseline_video()) {
-							video.src = "../media/cap12_edit.mp4";
+							video.src = "/media/cap12_edit.mp4";
 						} else {
 							return false;
 						}
@@ -184,22 +186,39 @@
 				var ctrack = new clm.tracker({useWebGL : true});
 				ctrack.init(pModel);
 
-				function startVideo() {
-					// start video
-					vid.play();
-					// start tracking
-					ctrack.start(vid);
-					// start loop to draw face
-					drawLoop();
+        var animRequest = null;
+
+				function startTracking() {
+          if (animRequest === null) {
+            ctrack.start(vid);
+            loop();
+
+            var startbutton = document.getElementById('startbutton');
+  					startbutton.value = "stop";
+            startbutton.onclick = stopTracking;
+          }
+
 				}
 
-				function drawLoop() {
-					requestAnimFrame(drawLoop);
+        function stopTracking() {
+          if (animRequest !== null) {
+            ctrack.stop();
+            cancelRequestAnimFrame(animRequest);
+            animRequest = null;
+
+            var startbutton = document.getElementById('startbutton');
+  					startbutton.value = "start";
+            startbutton.onclick = startTracking;
+          }
+        }
+
+				function loop() {
+					animRequest = requestAnimFrame(loop);
 					var cp = ctrack.getCurrentParameters();
 
 					var er = ec.meanPredict(cp);
           if (er) {
-            if (Math.random() < 0.05) {
+            if (Math.random() < 0.1) {
               console.log(JSON.stringify(er));
             }
 					}
