@@ -41,29 +41,31 @@ body.surprised {
 
 body {
   transition: background-color 200ms;
+  background-color: #f1f1f1;
 }
 
 body .demo-blog {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 
-h3 {
-   padding-left:32px
+h5 {
+   padding-left:20px
 }
 
 .menubox {
   position:absolute;
-  right:32px;
-  top:32px;
+  right:20px;
+  top:20px;
 }
 
 .news {
-  padding-top:80px;
+  padding-top:60px;
 }
 
-.news_title {
-  display:inline;
-  padding:16px;
+h4.news_title {
+  display:block;
+  margin: 8px;
+  padding: 8px;
   position:relative;
   top:10px;
 }
@@ -110,9 +112,8 @@ h3 {
   right:36px;
 }
 
-.story {
-  padding-left:32px;
-  padding-right:32px;
+.story.mdl-card__supporting-text {
+  width: calc(100% - 32px);
 }
 
 .demo-blog .demo-blog__posts {
@@ -470,5 +471,5 @@ h3 {
 }
 
 .story-img {
-  width:calc(100% - 30px);
+  width: 100%;
 }
