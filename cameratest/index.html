@@ -186,12 +186,28 @@
 				var ctrack = new clm.tracker({useWebGL : true});
 				ctrack.init(pModel);
 
+
+        /*
+         * We use exponential rolling decay for emotions, to reduce impact of noise
+         * from the classifier.
+         */
+        var HALF_LIFE = 1000;
+        var start = null;
+        var last = null;
+        var emotions = {};
+
+        /*
+         * Storing this allows us to stop the animation loop on demand.
+         */
         var animRequest = null;
 
 				function startTracking() {
           if (animRequest === null) {
             ctrack.start(vid);
-            loop();
+            start = null;
+            last = null;
+            emotions = {};
+            animRequest = requestAnimFrame(loop);
 
             var startbutton = document.getElementById('startbutton');
   					startbutton.value = "stop";
@@ -212,16 +228,63 @@
           }
         }
 
-				function loop() {
+        function getEmotionMap(er) {
+          var emotions = {};
+          er.forEach(function(entry) {
+            emotions[entry.emotion] = entry.value;
+          });
+          return emotions;
+        }
+
+        function getMaxEmotion(emotions) {
+          var maxEmotion = null;
+          var maxValue = -Infinity;
+          for (var emotion in emotions) {
+            if (emotions.hasOwnProperty(emotion) && emotions[emotion] > maxValue) {
+              maxEmotion = emotion;
+              maxValue = emotions[emotion];
+            }
+          }
+          return maxEmotion;
+        }
+
+        function blendEmotions(e1, e2, elapsed) {
+          var factor = Math.pow(0.5, elapsed / HALF_LIFE);
+          for (var emotion in e1) {
+            if (!e1.hasOwnProperty(emotion)) {
+              continue;
+            }
+            if (e2.hasOwnProperty(emotion)) {
+              e1[emotion] = e1[emotion] * (1.0 - factor) + e2[emotion] * factor;
+            }
+          }
+          for (var emotion in e2) {
+            if (e2.hasOwnProperty(emotion) && !e1.hasOwnProperty(emotion)) {
+              e1[emotion] = e2[emotion];
+            }
+          }
+          return e1;
+        }
+
+				function loop(timestamp) {
 					animRequest = requestAnimFrame(loop);
 					var cp = ctrack.getCurrentParameters();
 
 					var er = ec.meanPredict(cp);
-          if (er) {
-            if (Math.random() < 0.1) {
-              console.log(JSON.stringify(er));
-            }
-					}
+          if (!er) {
+            return;
+          }
+
+          var nextEmotions = getEmotionMap(er);
+          if (start === null) {
+            start = timestamp;
+            emotions = nextEmotions;
+          } else {
+            var elapsed = timestamp - last;
+            emotions = blendEmotions(emotions, nextEmotions, elapsed);
+          }
+          console.log(getMaxEmotion(emotions));
+          last = timestamp;
 				}
 
 				var ec = new emotionClassifier();
