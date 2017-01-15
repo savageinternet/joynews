@@ -23,6 +23,12 @@ h3 {
    padding-left:32px
 }
 
+.menubox {
+  position:absolute;
+  right:32px;
+  top:32px;
+}
+
 .news {
   padding-top:80px;
 }
