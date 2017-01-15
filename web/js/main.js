@@ -135,11 +135,17 @@ ctrack.init(pModel);
  * We use exponential rolling decay for emotions, to reduce impact of noise
  * from the classifier.
  */
-var HALF_LIFE = 1000;
+var HALF_LIFE = 500;
 var start = null;
 var last = null;
 var maxEmotion = null;
 var emotions = {};
+var EMOTION_FACTORS = {
+  'happy': 0.8,
+  'sad': 1.5,
+  'angry': 1.2,
+  'surprised': 1
+};
 
 /*
  * Storing this allows us to stop the animation loop on demand.
@@ -192,9 +198,13 @@ function getMaxEmotion(emotions) {
   var maxEmotion = null;
   var maxValue = -Infinity;
   for (var emotion in emotions) {
-    if (emotions.hasOwnProperty(emotion) && emotions[emotion] > maxValue) {
+    if (!emotions.hasOwnProperty(emotion)) {
+      continue;
+    }
+    var value = emotions[emotion] * EMOTION_FACTORS[emotion];
+    if (value > maxValue) {
       maxEmotion = emotion;
-      maxValue = emotions[emotion];
+      maxValue = value;
     }
   }
   if (maxValue < 0.1) {
