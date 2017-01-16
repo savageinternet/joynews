@@ -20,9 +20,9 @@ To run this yourself, you need an HTTPS server that you control and that is acce
 
 6pm Saturday: bounce the idea off a few people at Comedy Hack Day, to make sure that it's funny without being (overly) crude.
 
-9pm Saturday: on the bus home after some beer and general chitchat, Dev happens upon the [HTML5 Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API) exists, thereby saving untold hours of work.
-
 7:30pm Saturday: we deliver a stirring 60-second pitch.  The team soon includes a developer, a designer / developer hybrid, a designer, and a comedian, who somehow are all excited to spend their weekend making a giant face-detecting vibrating purple penis out of questionable code and purple Play-Doh.
+
+9pm Saturday: on the bus home after some beer and general chitchat, Dev happens upon the [HTML5 Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API) exists, thereby saving untold hours of work.
 
 9:30am Sunday: quick brainstorm.  We grab a whiteboard and start listing out tasks, separating them into the categories "Physical", "Code", and "Presentation".  These map nicely onto our team: we have one dedicated person in each category, plus a fourth (our designer / developer hybrid) who rotates between each as needed.
 
@@ -90,7 +90,7 @@ There are native vibration APIs in [Android](https://developer.android.com/refer
 
 Android has [FaceDetector](https://developer.android.com/reference/android/media/FaceDetector.html), but it doesn't give nearly as much feature position data as `clmtrackr`.  iOS has [CIDetector](https://developer.apple.com/library/content/documentation/GraphicsImaging/Conceptual/CoreImaging/ci_detect_faces/ci_detect_faces.html), which [provides more detailed information](https://developer.apple.com/reference/coreimage/cifacefeature) than `FaceDetector`.
 
-It would also be feasible to use (OpenCV)[http://opencv.org/] via native bridges for each platform.
+It would also be feasible to use [OpenCV](http://opencv.org/) via native bridges for each platform.
 
 ### Improved Emotion Detection
 
