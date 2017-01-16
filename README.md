@@ -8,7 +8,7 @@ Built for [Comedy Hack Day Toronto](http://www.comedyhackday.org/toronto/) 2017,
 
 - a dildo-shaped phone case attachment, complete with CAD designs;
 - a web page that uses [clmtrackr](https://github.com/auduno/clmtrackr) together with the [HTML5 vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API) to vary phone vibration patterns according to detected facial emotion;
-- a mockup of a news app that uses [Material Design Lite](https://getmdl.io/) to achieve Material Design guidelines within said web page.
+- a mockup of a news app that uses [Material Design Lite](https://getmdl.io/) to make said web page look more app-like.
 
 ## Test it Out
 
