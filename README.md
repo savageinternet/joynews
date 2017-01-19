@@ -22,6 +22,14 @@ Go to [dildo.savageinter.net](https://dildo.savageinter.net) *in Chrome on Andro
 
 To run this yourself, you need an HTTPS server that you control and that is accessible from your phone.  This means you'll need SSL certificates, either self-signed or through a certificate authority such as [Let's Encrypt](https://letsencrypt.org/).  You can quickly run an HTTPS server accessible over LAN using [Python 2.x](https://www.piware.de/2011/01/creating-an-https-server-in-python/) or [Python 3.x](http://stackoverflow.com/questions/19705785/python-3-https-webserver).
 
+## Presentation Assets
+
+The script for our presentation skit can be found in [/etc/JoyNews-skit.pdf](https://github.com/joynews/joynews/blob/master/etc/JoyNews-skit.pdf).
+
+The slides for our presentation skit can be found [on Google Drive](https://docs.google.com/presentation/d/1y_IePtHtJ1Z5-Ot3eRjXPJPIXKiYQvByj0ELNXUeFl0/edit#slide=id.g1b90601d29_0_3).
+
+The video of our presentation will be available soon.
+
 ## Process Timeline
 
 6pm Saturday: bounce the idea off a few people at Comedy Hack Day, to make sure that it's funny without being (overly) crude.
