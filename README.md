@@ -2,6 +2,12 @@
 
 Feel good about the news, even when it's terrible.
 
+# WTF is JoyNews?
+
+JoyNews is a hardware/software project which displays news stories on a mobile phone, reads the user's reaction to the stories using their phone's front-facing camera, and creates vibrational patterns based on the dominant emotion detected. Paired with the JoyNews phone case (a distinctly phallus-shaped object which you can put to *many* uses), this allows you to feel good about the news, even when it's terrible.
+
+# Where am I?
+
 Welcome to our GitHub repo!  If you're curious how JoyNews works (and, yes, it *does* work), you're in the right place.  What follows is a bit of a technical / process writeup on this project, in (hopefully) enough detail that you could do something similar.  (Not that you would, you deviant pervert.)
 
 Built for [Comedy Hack Day Toronto](http://www.comedyhackday.org/toronto/) 2017, JoyNews is a combination of:
